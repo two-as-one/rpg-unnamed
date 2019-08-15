@@ -1,0 +1,80 @@
+hp:
+  base: strength
+  values:
+    - 50
+    - 55
+    - 60
+    - 65
+    - 70
+
+damage:
+  base: strength
+  values:
+    - 3-5
+    - 4-7
+    - 5-10
+    - 6-14
+    - 7-19
+
+prot:
+  base: strength
+  values:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+
+lp:
+  base: charisma
+  values:
+    - 50
+    - 55
+    - 60
+    - 65
+    - 70
+
+lust:
+  base: charisma
+  values:
+    - 3-5
+    - 4-7
+    - 5-10
+    - 6-14
+    - 7-19
+
+focus:
+  base: charisma
+  values:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+
+dodge:
+  base: dexterity
+  values:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25
+
+accuracy:
+  base: dexterity
+  values:
+    - 75
+    - 80
+    - 85
+    - 90
+    - 95
+
+crit:
+  base: dexterity
+  values:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25

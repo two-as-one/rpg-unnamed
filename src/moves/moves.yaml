@@ -1,0 +1,15 @@
+pound:
+  name: Pound
+  position:
+    0:
+      accuracy: .90
+      lust: .75
+    1:
+      accuracy: .90
+      damage: .75
+    2:
+      accuracy: .90
+      damage: .75
+    3:
+      accuracy: .90
+      lust: .75
