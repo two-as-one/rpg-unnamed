@@ -1,15 +1,39 @@
 pound:
   name: Pound
-  position:
-    0:
-      accuracy: .90
-      lust: .75
-    1:
-      accuracy: .90
-      damage: .75
-    2:
-      accuracy: .90
-      damage: .75
-    3:
-      accuracy: .90
-      lust: .75
+  advance: true
+  damage: 0.75
+
+slam:
+  name: slam
+  damage: 1
+
+claw:
+  name: Claw
+  damage: 1
+
+flail:
+  name: flail
+  accuracy: -25
+  damage: 1.25
+
+power-shot:
+  name: Power shot
+  accuracy: -25
+  damage: 1.25
+
+trample:
+  name: Trample
+  damage: .50
+  advance: true
+  push: true
+
+kick:
+  name: Kick
+  damage: .25
+  retreat: true
+  push: true
+
+eagle-eye:
+  name: Eagle eye
+  accuracy: 100
+  dexUp: 2

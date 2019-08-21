@@ -1,0 +1,7 @@
+name: Imp
+strength: 1
+dexterity: 0
+charisma: 0
+moves:
+  - flail
+  - claw

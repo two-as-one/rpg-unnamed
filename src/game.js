@@ -1,23 +1,26 @@
 import { Entity } from "./entities/entity"
-import { DebugView } from "./debug/debug-view"
 import { Player } from "./entities/player"
+import TRACKER from "./entities/classes/tracker.yaml"
+// import SLIME from "./entities/enemies/slime.yaml"
+import IMP from "./entities/enemies/imp.yaml"
+import { Combat } from "./scenes/combat/combat"
+import { Chance } from "chance"
 
 export class Game {
   constructor() {
-    this.player = new Player({
-      name: "player",
-      strength: 2,
-      dexterity: 1,
-      charisma: 1,
-    })
-    this.opponent = new Entity({
-      name: "opponent",
-      strength: 1,
-      dexterity: 1,
-      charisma: 2,
-    })
+    this.el = document.createElement("div")
+    this.el.classList.add("game")
+    document.body.appendChild(this.el)
 
-    this.debugView = new DebugView(this)
+    this.chance = new Chance()
+    this.player = new Player(TRACKER)
+    this.opponent = new Entity(IMP)
+
+    this.setScene()
+  }
+
+  setScene() {
+    this.scene = new Combat(this, this.player, this.opponent)
   }
 }
 

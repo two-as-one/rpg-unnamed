@@ -1,0 +1,9 @@
+name: Tracker
+strength: 2
+dexterity: 2
+charisma: 1
+moves:
+  - pound
+  - kick
+  - power-shot
+  - eagle-eye

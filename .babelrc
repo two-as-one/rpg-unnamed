@@ -4,7 +4,8 @@
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-transform-runtime",
     "@babel/plugin-transform-object-assign",
-    "@babel/plugin-syntax-object-rest-spread"
+    "@babel/plugin-syntax-object-rest-spread",
+    "@babel/plugin-proposal-optional-chaining"
   ],
   "sourceMaps": true,
 

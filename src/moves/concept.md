@@ -1,17 +1,11 @@
-entity stats:
+Each entity has:
 
-- strength
-  - hp
-  - damage
-  - prot
-- dexterity
-  - dodge
-  - accuracy
-  - crit
-- charisma
-  - lp
-  - lust
-  - focus
+- forward move attack
+- backwards move attack
+- class attack
+- class attack
+- custom
+- custom
 
 attacks need the following:
 

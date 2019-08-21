@@ -1,27 +1,41 @@
 import { html, render } from "lit-html"
 import entityTemplate from "./entity.lit"
-import moveResultsTemplate from "./attack-results.lit"
-import controlsTemplate from "./controls.lit"
+import moveTemplate from "./move.lit"
 import "./debug.sass"
+import { CombatLog } from "../systems/combat-log"
+import combatLogTemplate from "./combat-log.lit"
 
 export class DebugView {
-  constructor(game) {
+  constructor(game, container = document.body) {
     this.game = game
-    this.render()
+    this.container = container
+    this.log = new CombatLog()
   }
 
-  render(results) {
-    const player = this.game.player
-    const opponent = this.game.opponent
+  async render(info) {
+    const player = this.game.scene.player
+    const opponent = this.game.scene.opponent
+
+    if (info) {
+      this.log.log(info)
+    }
+
+    if (!info?.move?.owner.isPlayer) {
+      await new Promise(r => setTimeout(r, 500))
+    }
 
     const template = (player, opponent) =>
       html`
-        <div class="entities">
-          ${entityTemplate(player)} ${entityTemplate(opponent)}
-        </div>
-        ${controlsTemplate(this.game, r => this.render(r))}
-        ${moveResultsTemplate(results)}
+        <section class="debug-view">
+          <div class="entities">
+            ${entityTemplate(player)} ${entityTemplate(opponent)}
+          </div>
+          <section class="moves">
+            ${Object.values(player.moves).map(move => moveTemplate(move))}
+          </section>
+          ${combatLogTemplate(this.log.history)}
+        </section>
       `
-    render(template(player, opponent), document.body)
+    render(template(player, opponent), this.container)
   }
 }

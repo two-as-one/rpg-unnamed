@@ -1,11 +1,12 @@
 import { cap } from "../utils/cap"
 import STATS from "./stats.yaml"
-import { moves } from "./../moves/move"
+import { Move } from "./../moves/move"
 import { game } from "./../game"
+import { Buff } from "./buff"
 
 function baseStat(name, entity) {
   const stat = STATS[name]
-  const level = entity[stat.base] - 1
+  const level = entity[stat.base]
   return stat.values[level]
 }
 
@@ -15,10 +16,20 @@ export class Entity {
 
     this.__config = config
 
-    this.__slot = config.slot || 0
+    this.__slot = config.slot || 2
 
     this.__damage = 0
     this.__arousal = 0
+    this.buffs = {
+      strength: new Buff("strength", 2),
+      dexterity: new Buff("dexterity", 2),
+      charisma: new Buff("charisma", 2),
+    }
+
+    this.moves = {}
+    this.__config.moves.forEach(
+      name => (this.moves[name] = new Move(name, this)),
+    )
   }
 
   get isPlayer() {
@@ -27,28 +38,42 @@ export class Entity {
 
   /** @returns {number} [1-5] the strength of this entity */
   get strength() {
-    return cap(this.__config.strength || 1, 1, 5)
+    let val = cap(this.__config.strength || 0, 0, 5)
+    if (this.buffs.strength.isActive) {
+      val += this.buffs.strength.power
+    }
+    return cap(val, 0, 10)
   }
 
   /** @returns {number} [1-5] the dexterity of this entity */
   get dexterity() {
-    return cap(this.__config.dexterity || 1, 1, 5)
+    let val = cap(this.__config.dexterity || 0, 0, 5)
+    if (this.buffs.dexterity.isActive) {
+      val += this.buffs.dexterity.power
+    }
+    return cap(val, 0, 10)
   }
 
   /** @returns {number} [1-5] the charisma of this entity */
   get charisma() {
-    return cap(this.__config.charisma || 1, 1, 5)
+    let val = cap(this.__config.charisma || 0, 0, 5)
+    if (this.buffs.charisma.isActive) {
+      val += this.buffs.charisma.power
+    }
+    return cap(val, 0, 10)
+  }
+
+  get maxHp() {
+    return baseStat("hp", this)
   }
 
   /** The current hit points of this entity */
   get hp() {
-    const maxHp = baseStat("hp", this)
-    return cap(maxHp - this.__damage, 0, maxHp)
+    return cap(this.maxHp - this.__damage, 0, this.maxHp)
   }
 
   set hp(/** @type {number} */ val) {
-    const maxHp = baseStat("hp", this)
-    this.__damage = cap(maxHp - val, 0, maxHp)
+    this.__damage = cap(this.maxHp - val, 0, this.maxHp)
   }
 
   get damage() {
@@ -59,15 +84,17 @@ export class Entity {
     return baseStat("prot", this)
   }
 
+  get maxLp() {
+    return baseStat("lp", this)
+  }
+
   /** The current lust points of this entity */
   get lp() {
-    const maxLp = baseStat("lp", this)
-    return cap(maxLp - this.__arousal, 0, maxLp)
+    return cap(this.maxLp - this.__arousal, 0, this.maxLp)
   }
 
   set lp(/** @type {number} */ val) {
-    const maxLp = baseStat("lp", this)
-    this.__arousal = cap(maxLp - val, 0, maxLp)
+    this.__arousal = cap(this.maxLp - val, 0, this.maxLp)
   }
 
   get lust() {
@@ -99,20 +126,56 @@ export class Entity {
     this.__slot = cap(val, 0, 3)
   }
 
+  /** @returns {Entity} The opponent of this entity */
+  get opponent() {
+    return game.scene.player
+  }
+
+  static isProne(slotA, slotB) {
+    slotA = cap(slotA, 0, 3)
+    slotB = cap(slotB, 0, 3)
+    return slotA === slotB && (slotA === 0 || slotA === 3)
+  }
+
+  /** @returns {boolean} Whether this entity is prone */
+  get isProne() {
+    return Entity.isProne(this.slot, this.opponent.slot)
+  }
+
   /**
    * Attack a target
    *
    * @param {string} name the name of the attack
-   * @param {Entity} target the target entity of the attack
    *
    * @returns the results of the attack
    */
-  attack(name, target) {
-    if (this.isPlayer) {
-      target = game.opponent
-    } else {
-      target = game.player
+  attack(name) {
+    return this.moves[name].execute()
+  }
+
+  /**
+   * Advance a slot
+   * @returns {boolean} true if position has actually changed
+   */
+  advance() {
+    const initial = this.slot
+    if (this.slot > this.opponent.slot) {
+      this.slot -= 1
     }
-    return moves.execute(name, this, target)
+    return initial !== this.slot
+  }
+
+  /**
+   * Retreat a slot
+   * @returns {boolean} true if position has actually changed
+   */
+  retreat() {
+    const initial = this.slot
+    this.slot += 1
+    return initial !== this.slot
+  }
+
+  upkeep() {
+    Object.values(this.buffs).forEach(buff => buff.upkeep())
   }
 }

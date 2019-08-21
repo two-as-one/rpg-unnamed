@@ -1,0 +1,108 @@
+@import ../../tokens
+
+.stats
+    background-color: $color-background-dark
+    color: $color-text-on-dark
+    display: flex
+    flex-direction: column
+    font-family: $font-family
+    font-size: $font-size-small
+    width: 200px
+
+    $portrait-size: 64px
+
+    .header
+        display: flex
+        flex-direction: row
+
+        &.reverse
+            flex-direction: row-reverse
+
+        .portrait
+            margin: $space-small
+            width: $portrait-size
+            height: $portrait-size
+            background: #bbbbbb
+            border: 3px solid #fff
+            flex-shrink: 0
+            box-sizing: border-box
+
+        .resources
+            margin: $space-small
+            display: flex
+            flex-direction: column
+            width: 100%
+
+            .name
+                color: #ffffff
+                margin-bottom: $space-medium
+                white-space: nowrap
+
+            .bar
+                display: flex
+                flex-direction: row
+
+                label
+                    color: #ffffff
+                    padding-right:  $space-small
+
+                .fill
+                    display: flex
+                    flex-direction: row
+                    width: 100%
+                    padding: $space-tiny 0
+
+                    span
+                        width: 100%
+                        background-color: #555
+
+                &.hp .fill .full
+                    background-color: #1dbc40
+
+                &.lp .fill .full
+                    background-color: #d783b9
+
+    .details
+        display: flex
+        flex-direction: row
+        border-top: 1px solid $color-text-on-dark
+
+        &.opponent
+            // flex-direction: row-reverse
+
+        .stat
+            color: #ffffff
+            display: flex
+            flex-direction: row
+            align-items: baseline
+
+            .value
+                width: 24px
+                text-align: right
+
+            label
+                margin-left: $space-small
+                color: $color-text-on-dark
+
+        .base-stats,
+        .derived-stats
+            display: flex
+            flex-direction: column
+            justify-content: flex-start
+            width: 50%
+            padding: $space-small
+
+        .base-stats
+            width: $portrait-size
+            border-right: 1px solid $color-text-on-dark
+            justify-content: center
+
+            .stat
+                font-size: $font-size-large
+
+                label
+                    font-size: $font-size-small
+
+        .derived-stats
+            padding-left: $space-large
+            justify-content: center
