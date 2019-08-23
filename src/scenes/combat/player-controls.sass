@@ -1,63 +1,82 @@
 @import ../../tokens
 
 .player-controls
+
     background-color: $color-background-dark
     color: $color-text-on-dark
+    height: 100%
     display: flex
     flex-direction: row
+    justify-content: center
 
-    .move
-        border: 3px solid $color-text-on-dark
-        background: $color-background-dark
-        color: $color-text-on-dark
-        cursor: pointer
+    .centered
         display: flex
-        flex-direction: column
-        min-width: 130px
-        align-items: stretch
-        padding: 0
-        margin: $space-small
-        text-align: left
-        font-size: $font-size-small
-        font-family: $font-family
+        flex-direction: row
+        flex-wrap: wrap
+        max-width: ($move-block-size + $space-small) * 6
 
-        &:hover
-            border-color: $color-text-on-dark-active
-            color: $color-text-on-dark-active
+        @media screen and ( max-width: (($move-block-size + $space-small) * 6) + $stat-block-size * 2 )
+            // 3 moves per row breakpoint
+            max-width: ($move-block-size + $space-small) * 3
 
-        .title
-            padding: $space-small
-            border-bottom-style: solid
-            border-bottom-width: $space-tiny
-            font-weight: bold
+        @media screen and ( max-width: (($move-block-size + $space-small) * 3) )
+            // 2 moves per row breakpoint
+            max-width: ($move-block-size + $space-small) * 2
 
-        .info
-            border-bottom-style: solid
-            border-bottom-width: $space-tiny
-            padding: $space-small 0
 
-            section
+        .move
+            border: 3px solid $color-text-on-dark
+            background: $color-background-dark
+            color: $color-text-on-dark
+            cursor: pointer
+            display: flex
+            flex-direction: column
+            width: $move-block-size
+            height: 180px
+            align-items: stretch
+            padding: 0
+            margin: $space-small $space-tiny
+            text-align: left
+            font-size: $font-size-small
+            font-family: $font-family
+
+            &:hover
+                border-color: $color-text-on-dark-active
+                color: $color-text-on-dark-active
+
+            .title
+                padding: $space-small
+                border-bottom-style: solid
+                border-bottom-width: $space-tiny
+                font-weight: bold
+
+            .info
+                border-bottom-style: solid
+                border-bottom-width: $space-tiny
+                padding: $space-small 0
+
+                section
+                    padding: 0 $space-small
+
+            .effect
                 padding: 0 $space-small
 
-        .effect
-            padding: 0 $space-small
 
-
-        .effects
-            display: flex
-            flex-direction: row
-            justify-content: space-between
-            width: 100%
-            flex-grow: 1
-
-            .self,
-            .opponent
+            .effects
+                display: flex
+                flex-direction: row
+                justify-content: space-between
+                width: 100%
                 flex-grow: 1
 
-                .name
-                    border-bottom-style: solid
-                    border-bottom-width: 1px
+                .self,
+                .opponent
+                    flex-grow: 1
 
-            .opponent
-                border-right-style: solid
-                border-right-width: $space-tiny
+                    .name
+                        border-bottom-style: solid
+                        border-bottom-width: 1px
+
+                .opponent
+                    border-right-style: solid
+                    border-right-width: $space-tiny

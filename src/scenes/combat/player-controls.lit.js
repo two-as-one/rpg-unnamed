@@ -3,9 +3,11 @@ import "./player-controls.sass"
 
 export default (/** @type import("./combat").Combat */ scene) => html`
   <section class="player-controls">
-    ${Object.values(scene.player.moves).map(move =>
-      moveTemplate(move, move.tooltip, scene),
-    )}
+    <section class="centered">
+      ${Object.values(scene.player.moves).map(move =>
+        moveTemplate(move, move.tooltip, scene),
+      )}
+    </section>
   </section>
 `
 const moveTemplate = (

@@ -16,7 +16,7 @@ export class Entity {
 
     this.__config = config
 
-    this.__slot = config.slot || 2
+    this.__slot = config.slot || 1
 
     this.__damage = 0
     this.__arousal = 0
@@ -119,11 +119,11 @@ export class Entity {
 
   /** The current slot on the field this entity is occupying */
   get slot() {
-    return cap(this.__slot, 0, 3)
+    return cap(this.__slot, 0, 2)
   }
 
   set slot(/** @type {number} */ val) {
-    this.__slot = cap(val, 0, 3)
+    this.__slot = cap(val, 0, 2)
   }
 
   /** @returns {Entity} The opponent of this entity */
@@ -132,9 +132,9 @@ export class Entity {
   }
 
   static isProne(slotA, slotB) {
-    slotA = cap(slotA, 0, 3)
-    slotB = cap(slotB, 0, 3)
-    return slotA === slotB && (slotA === 0 || slotA === 3)
+    slotA = cap(slotA, 0, 2)
+    slotB = cap(slotB, 0, 2)
+    return slotA === slotB && (slotA === 0 || slotA === 2)
   }
 
   /** @returns {boolean} Whether this entity is prone */

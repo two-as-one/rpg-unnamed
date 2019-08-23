@@ -87,16 +87,19 @@ export class Move {
         )
       : 100
 
-    lust = Move.calcRange(
-      this.owner.lust,
-      move.damage,
-      this.owner.opponent.focus,
-    )
-    damage = Move.calcRange(
-      this.owner.damage,
-      move.damage,
-      this.owner.opponent.prot,
-    )
+    if (this.wouldBeProne(push, pull, retreat, advance)) {
+      lust = Move.calcRange(
+        this.owner.lust,
+        move.damage,
+        this.owner.opponent.focus,
+      )
+    } else {
+      damage = Move.calcRange(
+        this.owner.damage,
+        move.damage,
+        this.owner.opponent.prot,
+      )
+    }
 
     const crit =
       damage || lust ? Move.calcChance(this.owner.crit, move.crit || 0) : 0
@@ -140,6 +143,42 @@ export class Move {
     stats.lust = chance.integer(Move.minMax(stats.lust)) * multiplier
 
     return stats
+  }
+
+  /**
+   * Checks whether using this move would cause the owner to become prone
+   *
+   * @param {boolean} push
+   * @param {boolean} pull
+   * @param {boolean} retreat
+   * @param {boolean} advance
+   * @returns {boolean} true if the owner would be prone
+   */
+  wouldBeProne(push, pull, retreat, advance) {
+    const a = this.owner
+    const b = a.opponent
+    const initA = a.slot
+    const initB = b.slot
+
+    if (push) {
+      b.retreat()
+    }
+    if (pull) {
+      b.advance()
+    }
+    if (retreat) {
+      a.retreat()
+    }
+    if (advance) {
+      a.advance()
+    }
+
+    const prone = a.isProne
+
+    a.slot = initA
+    b.slot = initB
+
+    return prone
   }
 
   static calcChance(base, ...modifiers) {

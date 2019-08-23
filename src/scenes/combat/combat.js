@@ -5,13 +5,57 @@ import { render, html } from "lit-html"
 
 import "./combat.sass"
 
-const template = scene => html`
+const entityTemplate = (
+  /** @type import("./../../entities/entity").Entity*/ entity,
+  results,
+) => html`
+  <section
+    class="entity ${entity.isPlayer ? "player" : ""} ${entity.isProne
+      ? "prone"
+      : ""} ${results?.move.owner === entity ? "attack" : ""}"
+  >
+    ${results?.move.owner === entity && !results?.hit
+      ? html`
+          <span class="miss">MISS</span>
+        `
+      : ""}
+  </section>
+`
+
+const template = (/** @type Combat */ scene, results) => html`
   <section class="combat">
-    <section class="scene"></section>
+    <section class="scene">
+      <section class="entities">
+        <section class="slot slot-0">
+          ${scene.player.slot === 0
+            ? entityTemplate(scene.player, results)
+            : ""}
+          ${scene.opponent.slot === 0
+            ? entityTemplate(scene.opponent, results)
+            : ""}
+        </section>
+        <section class="slot slot-1">
+          ${scene.player.slot === 1
+            ? entityTemplate(scene.player, results)
+            : ""}
+          ${scene.opponent.slot === 1
+            ? entityTemplate(scene.opponent, results)
+            : ""}
+        </section>
+        <section class="slot slot-2">
+          ${scene.player.slot === 2
+            ? entityTemplate(scene.player, results)
+            : ""}
+          ${scene.opponent.slot === 2
+            ? entityTemplate(scene.opponent, results)
+            : ""}
+        </section>
+      </section>
+    </section>
     <section class="dashboard">
       <section class="player">${playerStatsTemplate(scene.player)}</section>
-      <section class="controls">${playerControlsTemplate(scene)}</section>
       <section class="opponent">${playerStatsTemplate(scene.opponent)}</section>
+      <section class="controls">${playerControlsTemplate(scene)}</section>
     </section>
   </section>
 `
@@ -31,26 +75,24 @@ export class Combat {
     this.render()
   }
 
-  async render() {
+  async render(results) {
     await new Promise(r => requestAnimationFrame(r))
-    render(template(this), this.game.el)
-
+    render(template(this, results), this.game.el)
     await new Promise(r => setTimeout(r, 500))
   }
 
   async turn(/** @type import("../../moves/move").Move */ move) {
-    // await end of call stack
+    // await end of call stack as to not interfere with the FSM
     await new Promise(r => requestAnimationFrame(r))
 
-    move.execute()
-    await this.render()
+    await this.render(move.execute())
 
     this.opponent.upkeep()
     await this.render()
 
     move = this.game.chance.pickone(Object.values(this.opponent.moves))
-    move.execute()
-    await this.render()
+
+    await this.render(move.execute())
 
     this.player.upkeep()
     await this.render()

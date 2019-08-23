@@ -1,5 +1,13 @@
 @import ../../tokens
 
+@keyframes wiggle
+    0%
+        transform: rotate(5deg)
+    50%
+        transform: rotate(-5deg)
+    100%
+        transform: rotate(0deg)
+
 .combat
     position: fixed
     top: 0
@@ -8,11 +16,43 @@
     right: 0
     display: flex
     flex-direction: column
+
     .scene
         width: 100%
         height: 100%
         background-color: #bbbbbb
         box-shadow: inset 0 0 50vw rgba(0,0,0,.75)
+
+        .entities
+            display: flex
+            flex-direction: row
+            width: 100%
+            height: 100%
+            justify-content: center
+            align-items: center
+
+            .slot
+                width: 150px
+                height: 200px
+                justify-content: center
+                align-items: flex-end
+                margin: $space-large
+                border-bottom: solid 3px #ffffff
+                display: flex
+
+                .entity
+                    width: 50px
+                    height: 150px
+                    border-radius: 50%
+                    background-color: #9c4715
+                    &.player
+                        background-color: #1b6e1e
+
+                    &.attack
+                        animation: 0.5s wiggle
+
+                    &.prone
+                        transform: rotate(90deg) translateX(100%)
 
     .dashboard
         background-color: $color-background-dark
@@ -20,6 +60,20 @@
         flex-direction: row
         justify-content: space-between
         align-items: stretch
+        position: relative
+
+        > section.player,
+        > section.opponent
+            position: absolute
+            top: 0
+        > section.player
+            left: 0
+        > section.opponent
+            right: 0
 
         .controls
             flex-grow: 1
+            margin: 0 $stat-block-size
+
+            @media screen and ( max-width: 800px )
+                margin: 200px 0 0 0
